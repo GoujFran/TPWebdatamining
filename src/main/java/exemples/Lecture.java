@@ -19,9 +19,9 @@ public class Lecture {
 
 	public static void main(String[] args) {
 		
-		Lecture lecture = new Lecture();
+		//Lecture lecture = new Lecture();
 
-		HashMap<String, HashMap<String, Integer>> hashmap = lecture.lireTousLesDocument();
+		//HashMap<String, HashMap<String, Integer>> hashmap = lecture.lireTousLesDocument();
 
 	}
 
