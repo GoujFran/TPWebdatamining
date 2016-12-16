@@ -1,6 +1,8 @@
 package arbres;
 
-public abstract class Element {
+import java.io.Serializable;
+
+public abstract class Element implements Serializable {
 	private Noeud noeudParent;
 
 	public Element(Noeud noeudParent) {

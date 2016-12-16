@@ -24,55 +24,68 @@ public class LectureArbres {
 
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
+
+		// Pour créer les arbres
+		/*LectureArbres lecture = new LectureArbres(true);
+		lecture.lireTousLesDocument();*/
+
+		//Pour ne pas les créer quand on les récupère de la sérialisation
+		LectureArbres lecture = new LectureArbres(false);
 		
-		LectureArbres lecture = new LectureArbres();
-		//lecture.lireTousLesDocument();
-		
-		/*System.out.println("Liste des documents");
-		 LinkedList<String> docs = lecture.chercherMot("avoir");
-		 for (String doc : docs) {
-			 System.out.println(doc);
-		 }*/
-		
+		//Pour sérialiser les arbres
 		/*int compteur = 0;
 		for (Arbre arbre : lecture.listeArbres) {
 			FileOutputStream fos = new FileOutputStream("src/main/arbres/arbre"+ compteur +".serial");
 
 			ObjectOutputStream oos= new ObjectOutputStream(fos);
-			
+
 			oos.writeObject(arbre); 
 			oos.flush();
-			
+
 			oos.close();
 			fos.close();
 			compteur++;
 		}*/
-		
+
+		//Pour lire les arbres
 		int compteur = 0;
 		for (int i=0;i<26;i++) {
 			FileInputStream fis = new FileInputStream("src/main/arbres/arbre"+ compteur +".serial");
 
 			ObjectInputStream ois= new ObjectInputStream(fis);
-			
+
 			Arbre arbre = (Arbre) ois.readObject();
 			lecture.listeArbres.add(arbre);
 			ois.close();
 			fis.close();
 			compteur++;
 		}
+
+		System.out.println("Lecture des arbres");
+		for (Arbre arbre : lecture.listeArbres) {
+			System.out.println(arbre.getInitNoeud().getValeur() + " : " + arbre.getInitNoeud().getListeNoeuds().size());
+		}
+
+		System.out.println("Liste des documents");
+		LinkedList<String> docs = lecture.chercherMot("avoir");
+		for (String doc : docs) {
+			System.out.println(doc);
+		}
 	}
 
 
 
 	ArrayList<Arbre> listeArbres = new ArrayList<Arbre>();
-	
+
 	String[] alphabet = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
 
-	public LectureArbres() {
-		for (String c : alphabet){
-			Arbre arbre = new Arbre(c);
-			this.listeArbres.add(arbre);
-		}
+	public LectureArbres(boolean charge) {
+		if (charge == true){
+			for (String c : alphabet){
+				Arbre arbre = new Arbre(c);
+				this.listeArbres.add(arbre);
+			}
+		} 
 	}
 
 	public String lireFichier(File file)  {
@@ -159,11 +172,11 @@ public class LectureArbres {
 			String texte = this.lireFichier(file);
 			//System.out.println(texte);
 			HashMap<String,Integer> hashmap = this.wraperTT(texte);
-			
+
 			remplirArbre(hashmap, fichier);
 		}
 	}
-	
+
 	public void remplirArbre(HashMap<String,Integer> hashmap, String document) {
 		System.out.println(document);
 		for (String mot : hashmap.keySet()){
@@ -183,8 +196,8 @@ public class LectureArbres {
 	public String removeAccent(String source) {
 		return Normalizer.normalize(source, Normalizer.Form.NFD).replaceAll("[\u0300-\u036F]", "");
 	}
-	
-	
+
+
 	public LinkedList<String> chercherMot(String mot) {
 		LinkedList<String> documents = null;
 		int compteur = 0;
@@ -196,7 +209,7 @@ public class LectureArbres {
 			compteur += 1;
 		}
 		Noeud noeud = listeArbres.get(index).getInitNoeud();
-		
+
 		for (int i = 1;i<mot.length();i++) {
 			String lettre = mot.substring(i,i+1);
 			boolean trouve = false;
