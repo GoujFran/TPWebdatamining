@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.Normalizer;
@@ -26,14 +27,14 @@ public class LectureArbres {
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
 		// Pour créer les arbres
-		/*LectureArbres lecture = new LectureArbres(true);
-		lecture.lireTousLesDocument();*/
+		LectureArbres lecture = new LectureArbres(true);
+		lecture.lireTousLesDocument();
 
 		//Pour ne pas les créer quand on les récupère de la sérialisation
-		LectureArbres lecture = new LectureArbres(false);
+		//LectureArbres lecture = new LectureArbres(false);
 		
 		//Pour sérialiser les arbres
-		/*int compteur = 0;
+		int compteur = 0;
 		for (Arbre arbre : lecture.listeArbres) {
 			FileOutputStream fos = new FileOutputStream("src/main/arbres/arbre"+ compteur +".serial");
 
@@ -45,10 +46,10 @@ public class LectureArbres {
 			oos.close();
 			fos.close();
 			compteur++;
-		}*/
+		}
 
 		//Pour lire les arbres
-		int compteur = 0;
+		/*int compteur = 0;
 		for (int i=0;i<26;i++) {
 			FileInputStream fis = new FileInputStream("src/main/arbres/arbre"+ compteur +".serial");
 
@@ -59,7 +60,7 @@ public class LectureArbres {
 			ois.close();
 			fis.close();
 			compteur++;
-		}
+		}*/
 
 		System.out.println("Lecture des arbres");
 		for (Arbre arbre : lecture.listeArbres) {
@@ -67,7 +68,7 @@ public class LectureArbres {
 		}
 
 		System.out.println("Liste des documents");
-		LinkedList<String> docs = lecture.chercherMot("avoir");
+		LinkedList<String> docs = lecture.chercherMot("nouveau");
 		for (String doc : docs) {
 			System.out.println(doc);
 		}
@@ -114,7 +115,7 @@ public class LectureArbres {
 
 	public HashMap<String, Integer> wraperTT(String texte) {
 		HashMap<String,Integer> hashmap = new HashMap<String,Integer>();
-		texte = texte.replaceAll(",", " ,");
+		texte = texte.replaceAll(",", " , ");
 		texte = texte.replaceAll("'", " ' ");
 		texte = texte.replaceAll("\"", " \" ");
 		texte = texte.replaceAll("[(]", " ( ");
@@ -188,8 +189,10 @@ public class LectureArbres {
 				}
 				compteur += 1;
 			}
-			//System.out.println(mot);
-			listeArbres.get(index).getInitNoeud().insererMots(mot, document);
+			System.out.println(mot);
+			for (int i = 0; i<hashmap.get(mot);i++) {
+				listeArbres.get(index).getInitNoeud().insererMots(mot, document);
+			}
 		}
 	}
 
