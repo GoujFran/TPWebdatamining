@@ -4,7 +4,7 @@ import static java.util.Arrays.asList;
 
 import java.io.IOException;
 import java.text.Normalizer;
-import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.annolab.tt4j.TreeTaggerException;
 import org.annolab.tt4j.TreeTaggerWrapper;
@@ -21,8 +21,8 @@ public class Requete {
 		return this.phrase;
 	}
 
-	public HashMap<String, Integer> wraperTT(String texte) {
-		HashMap<String,Integer> hashmap = new HashMap<String,Integer>();
+	public LinkedList<String>  wraperTT(String texte) {
+		LinkedList<String> liste = new LinkedList<String>();
 		texte = texte.replaceAll(",", " ,");
 		texte = texte.replaceAll("'", " ' ");
 		texte = texte.replaceAll("\"", " \" ");
@@ -43,11 +43,9 @@ public class Requete {
 				if ( !pos.startsWith("NUM") && !pos.startsWith("KON") &&  !pos.startsWith("PRP") &&  !pos.startsWith("DET") &&  !pos.startsWith("PUN") &&  !pos.startsWith("PRO")){
 					//System.out.println(token + " " + pos +" "+lemma);
 					lemma = removeAccent(lemma.toLowerCase());
-					if (hashmap.containsKey(lemma)) {
-						hashmap.put(lemma,hashmap.get(lemma)+1);
-					} else {
-						hashmap.put(lemma, 1);
-					}
+					if (!liste.contains(lemma)) {
+						liste.add(lemma);
+					} 
 				}
 			}
 					);
@@ -67,8 +65,9 @@ public class Requete {
 		finally {
 			tt.destroy();
 		}
-		return hashmap;
+		return liste;
 	}
+	
 	public String removeAccent(String source) {
 		return Normalizer.normalize(source, Normalizer.Form.NFD).replaceAll("[\u0300-\u036F]", "");
 	}
