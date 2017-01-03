@@ -2,9 +2,8 @@ package exemples;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
-
-import arbres.Arbre;
 
 public class Calcul {
 
@@ -21,9 +20,14 @@ public class Calcul {
         return result;
     }
 
-    public double calculTF(Arbre arbre,String mot, String document){
+    public double calculTF( LectureArbres lectureArbre,String mot, String document){
         double result = 0;
-        
+        LinkedList<String> listDoc = lectureArbre.chercherMot(mot);
+        for (String doc : listDoc){
+        	if (doc.equals(document)){
+        		result++ ;
+        	}
+        }
         return result;
     }
 
