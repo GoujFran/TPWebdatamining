@@ -169,13 +169,18 @@ public class LectureArbres {
 
 		for (String fichier : listeFichiers) {
 
-			File file = new File("src/main/resources/" + fichier);
-			String texte = this.lireFichier(file);
-			//System.out.println(texte);
-			HashMap<String,Integer> hashmap = this.wraperTT(texte);
-
-			remplirArbre(hashmap, fichier);
+			insererFichier(fichier);
 		}
+	}
+	
+	public void insererFichier(String fichier){
+		File file = new File("src/main/resources/" + fichier);
+		
+		String texte = this.lireFichier(file);
+		//System.out.println(texte);
+		HashMap<String,Integer> hashmap = this.wraperTT(texte);
+
+		remplirArbre(hashmap, fichier);
 	}
 
 	public void remplirArbre(HashMap<String,Integer> hashmap, String document) {

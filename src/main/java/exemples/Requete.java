@@ -4,6 +4,8 @@ import static java.util.Arrays.asList;
 
 import java.io.IOException;
 import java.text.Normalizer;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 import org.annolab.tt4j.TreeTaggerException;
@@ -21,19 +23,19 @@ public class Requete {
 		return this.phrase;
 	}
 
-	public LinkedList<String>  wraperTT(String texte) {
+	public LinkedList<String>  wraperTT() {
 		LinkedList<String> liste = new LinkedList<String>();
-		texte = texte.replaceAll(",", " ,");
-		texte = texte.replaceAll("'", " ' ");
-		texte = texte.replaceAll("\"", " \" ");
-		texte = texte.replaceAll("[(]", " ( ");
-		texte = texte.replaceAll("[)]", " ) ");
-		texte = texte.replaceAll("\\[|\\]" , "");
-		texte = texte.replaceAll("[-+*/]", " ");
-		texte = texte.replaceAll("[0123456789]", " ");
-		texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
+		phrase = phrase.replaceAll(",", " ,");
+		phrase = phrase.replaceAll("'", " ' ");
+		phrase = phrase.replaceAll("\"", " \" ");
+		phrase = phrase.replaceAll("[(]", " ( ");
+		phrase = phrase.replaceAll("[)]", " ) ");
+		phrase = phrase.replaceAll("\\[|\\]" , "");
+		phrase = phrase.replaceAll("[-+*/]", " ");
+		phrase = phrase.replaceAll("[0123456789]", " ");
+		phrase = phrase.replaceAll("[?!#$€%&'`;:/@...]", " ");
 		//System.out.println(texte);
-		String[] phrases = texte.split("[.]");
+		String[] phrases = phrase.split("[.]");
 		System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
 		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
 		try {
@@ -73,6 +75,21 @@ public class Requete {
 	}
 
 
+	public HashMap<String, Integer> calculCos(LectureArbres lecture) {
+		HashMap<String,Integer> resultat = new HashMap<String,Integer> ();
+		
+		LinkedList<String> liste = this.wraperTT();
+		HashSet<String> listeDocuments = new HashSet<String>();
+		for (String mot : liste) {
+			listeDocuments.addAll(lecture.chercherMot(mot));
+		}
+		
+		for (String doc : listeDocuments) {
+			
+		}
+		
+		return resultat;
+	}
 
 }
 
