@@ -83,9 +83,9 @@ public class Requete {
 		for (String mot : liste) {
 			listeDocuments.addAll(lecture.chercherMot(mot));
 		}
-		
-		double res = 0;
+	
 		for (String doc : listeDocuments) {
+			double res = 0;
 			for (String mot : liste) {
 				res += Calcul.calculOkapi(lecture, mot, doc);
 			}

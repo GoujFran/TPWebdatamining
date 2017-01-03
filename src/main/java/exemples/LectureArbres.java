@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 
 import org.annolab.tt4j.TreeTaggerException;
 import org.annolab.tt4j.TreeTaggerWrapper;
@@ -27,14 +28,14 @@ public class LectureArbres {
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
 		// Pour créer les arbres
-		LectureArbres lecture = new LectureArbres(true);
-		lecture.lireTousLesDocument();
+		/*LectureArbres lecture = new LectureArbres(true);
+		lecture.lireTousLesDocument();*/
 
 		//Pour ne pas les créer quand on les récupère de la sérialisation
-		//LectureArbres lecture = new LectureArbres(false);
+		LectureArbres lecture = new LectureArbres(false);
 		
 		//Pour sérialiser les arbres
-		int compteur = 0;
+		/*int compteur = 0;
 		for (Arbre arbre : lecture.listeArbres) {
 			FileOutputStream fos = new FileOutputStream("src/main/arbres/arbre"+ compteur +".serial");
 
@@ -46,10 +47,10 @@ public class LectureArbres {
 			oos.close();
 			fos.close();
 			compteur++;
-		}
+		}*/
 
 		//Pour lire les arbres
-		/*int compteur = 0;
+		int compteur = 0;
 		for (int i=0;i<26;i++) {
 			FileInputStream fis = new FileInputStream("src/main/arbres/arbre"+ compteur +".serial");
 
@@ -60,7 +61,7 @@ public class LectureArbres {
 			ois.close();
 			fis.close();
 			compteur++;
-		}*/
+		}
 
 		System.out.println("Lecture des arbres");
 		for (Arbre arbre : lecture.listeArbres) {
@@ -68,10 +69,16 @@ public class LectureArbres {
 		}
 
 		System.out.println("Liste des documents");
-		LinkedList<String> docs = lecture.chercherMot("nouveau");
+		LinkedList<String> docs = lecture.chercherMot("fgfj");
 		for (String doc : docs) {
 			System.out.println(doc);
 		}
+		
+		/*Requete requete = new Requete("f");
+		HashMap<String, Double> hashmap = requete.calculCos(lecture);
+		for (Entry<String, Double> e : hashmap.entrySet()) {
+			System.out.println(e.getKey()+ " : "+e.getValue());
+		}*/
 	}
 
 
@@ -191,7 +198,7 @@ public class LectureArbres {
 	}
 
 	public void remplirArbre(HashMap<String,Integer> hashmap, String document) {
-		System.out.println(document);
+		//System.out.println(document);
 		for (String mot : hashmap.keySet()){
 			int compteur = 0;
 			int index = -1;
@@ -201,7 +208,7 @@ public class LectureArbres {
 				}
 				compteur += 1;
 			}
-			System.out.println(mot);
+			//System.out.println(mot);
 			for (int i = 0; i<hashmap.get(mot);i++) {
 				listeArbres.get(index).getInitNoeud().insererMots(mot, document);
 			}
@@ -217,6 +224,8 @@ public class LectureArbres {
 		LinkedList<String> documents = null;
 		int compteur = 0;
 		int index = -1;
+		
+		//chercher le bon arbre
 		for (String lettre : alphabet) {
 			if (mot.startsWith(lettre)) {
 				index = compteur;
@@ -224,23 +233,27 @@ public class LectureArbres {
 			compteur += 1;
 		}
 		Noeud noeud = listeArbres.get(index).getInitNoeud();
-
+		
 		for (int i = 1;i<mot.length();i++) {
 			String lettre = mot.substring(i,i+1);
 			boolean trouve = false;
 			for (Noeud temp : noeud.getListeNoeuds()) {
+				System.out.println(temp.getValeur());
 				if (temp.getValeur().equals(lettre)) {
 					noeud = temp;
 					trouve = true;
-				} 
+					break;
+				}
+				System.out.println(trouve);
 			}
-			if (trouve = false) {
-				System.out.println("Le mot n'existe pas !"); 
+			if (trouve == false) {
+				System.out.println("Le mot n'existe pas ! trouve false"); 
+				noeud = new Noeud(null,null);
 				break;
 			} 
 		}
 		if (noeud.getFeuille() == null) {
-			System.out.println("Le mot n'existe pas !"); 
+			System.out.println("Le mot n'existe pas ! pas de feuille"); 
 		} else {
 			documents = noeud.getFeuille().getDocuments();
 		}
