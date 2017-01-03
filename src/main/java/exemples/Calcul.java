@@ -1,5 +1,6 @@
 package exemples;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -47,8 +48,10 @@ public class Calcul {
 
     public double calculIDF(LectureArbres lectureArbre,String mot){
         double result = 0;
+        File resources = new File("src/main/resources");
+		String[] listeFichiers = resources.list();
         Set<String> listDoc = new HashSet<String>(lectureArbre.chercherMot(mot));
-        result = Math.log10(listDoc.size()/result);
+        result = Math.log10(listeFichiers.length/listDoc.size());
         return result;
     }
 
