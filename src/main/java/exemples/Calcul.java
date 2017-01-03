@@ -1,7 +1,10 @@
 package exemples;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
+
+import arbres.Arbre;
 
 public class Calcul {
 
@@ -15,6 +18,19 @@ public class Calcul {
                     }
         }
         
+        return result;
+    }
+
+    public double calculTF(Arbre arbre,String mot, String document){
+        double result = 0;
+        
+        return result;
+    }
+
+    public double calculIDF(String mot, LectureArbres lectureArbre){
+        double result = 0;
+        Set<String> listDoc = new HashSet<String>(lectureArbre.chercherMot(mot));
+        result = Math.log10(listDoc.size()/result);
         return result;
     }
 
