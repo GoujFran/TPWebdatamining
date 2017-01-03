@@ -75,6 +75,7 @@ public class LectureArbres {
 	}
 
 
+	private HashMap<String,Integer> longueurDocuments = new HashMap<String,Integer>();
 
 	ArrayList<Arbre> listeArbres = new ArrayList<Arbre>();
 
@@ -179,7 +180,13 @@ public class LectureArbres {
 		String texte = this.lireFichier(file);
 		//System.out.println(texte);
 		HashMap<String,Integer> hashmap = this.wraperTT(texte);
-
+		
+		int res=0;
+		for (int i :hashmap.values()) {
+			res += i;
+		}
+		
+		longueurDocuments.put(fichier,res);
 		remplirArbre(hashmap, fichier);
 	}
 
@@ -239,4 +246,12 @@ public class LectureArbres {
 		}
 		return documents;
 	}
+
+	public HashMap<String, Integer> getLongueurDocuments() {
+		return longueurDocuments;
+	}
+	
+	
 }
+
+
