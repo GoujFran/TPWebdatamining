@@ -131,8 +131,8 @@ public class LectureArbres {
 		texte = texte.replaceAll("[(]", " ( ");
 		texte = texte.replaceAll("[)]", " ) ");
 		texte = texte.replaceAll("\\[|\\]" , "");
-		texte = texte.replaceAll("[-+*/]", " ");
-		texte = texte.replaceAll("[«»]", "");
+		texte = texte.replaceAll("[-+*/=@¤µ£]", " ");
+		texte = texte.replaceAll("[«»{}_^]", "");
 		texte = texte.replaceAll("[0123456789]", " ");
 		texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
 		//System.out.println(texte);
