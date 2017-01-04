@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 
 import java.io.IOException;
 import java.text.Normalizer;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -96,7 +97,7 @@ public class Requete {
 		}
 		HashMap<String,Double> resultatTrie = resultat.entrySet()
 								              .stream()
-								              .sorted(Map.Entry.comparingByValue())
+								              .sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
 								              .collect(Collectors.toMap(
 								                Map.Entry::getKey, 
 								                Map.Entry::getValue, 

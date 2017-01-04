@@ -31,14 +31,14 @@ public class LectureArbres {
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
 		// Pour créer les arbres
-		LectureArbres lecture = new LectureArbres(true);
-		lecture.lireTousLesDocument();
+		/*LectureArbres lecture = new LectureArbres(true);
+		lecture.lireTousLesDocument();*/
 
 		//Pour ne pas les créer quand on les récupère de la sérialisation
-		//LectureArbres lecture = new LectureArbres(false);
+		LectureArbres lecture = new LectureArbres(false);
 		
 		//Pour sérialiser les arbres
-		int compteur = 0;
+		/*int compteur = 0;
 		for (Arbre arbre : lecture.listeArbres) {
 			FileOutputStream fos = new FileOutputStream("src/main/arbres/arbre"+ compteur +".serial");
 
@@ -58,10 +58,10 @@ public class LectureArbres {
 		oos.flush();
 
 		oos.close();
-		fos.close();
+		fos.close();*/
 
 		//Pour lire les arbres
-		/*int compteur = 0;
+		int compteur = 0;
 		for (int i=0;i<26;i++) {
 			FileInputStream fis = new FileInputStream("src/main/arbres/arbre"+ compteur +".serial");
 
@@ -81,14 +81,13 @@ public class LectureArbres {
 		ois.close();
 		fis.close();
 		compteur++;
-		*/
 
 		System.out.println("Lecture des arbres");
 		for (Arbre arbre : lecture.listeArbres) {
 			System.out.println(arbre.getInitNoeud().getValeur() + " : " + arbre.getInitNoeud().getListeNoeuds().size());
 		}
 
-		/*System.out.println("Liste des documents");
+		System.out.println("Liste des documents");
 		LinkedList<String> docs = lecture.chercherMot("candidat");
 		for (String doc : docs) {
 			System.out.println(doc);
@@ -98,7 +97,7 @@ public class LectureArbres {
 		HashMap<String, Double> hashmap = requete.calculCos(lecture);
 		for (Entry<String, Double> e : hashmap.entrySet()) {
 			System.out.println(e.getKey()+ " : "+e.getValue());
-		}*/
+		}
 	}
 
 
