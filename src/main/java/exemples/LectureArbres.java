@@ -7,20 +7,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map.Entry;
 
 import org.annolab.tt4j.TreeTaggerException;
 import org.annolab.tt4j.TreeTaggerWrapper;
 
-import arbres.*;
+import arbres.Arbre;
+import arbres.Noeud;
 
 public class LectureArbres {
 
@@ -28,14 +27,14 @@ public class LectureArbres {
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
 		// Pour créer les arbres
-		/*LectureArbres lecture = new LectureArbres(true);
-		lecture.lireTousLesDocument();*/
+		LectureArbres lecture = new LectureArbres(true);
+		lecture.lireTousLesDocument();
 
 		//Pour ne pas les créer quand on les récupère de la sérialisation
-		LectureArbres lecture = new LectureArbres(false);
+		//LectureArbres lecture = new LectureArbres(false);
 		
 		//Pour sérialiser les arbres
-		/*int compteur = 0;
+		int compteur = 0;
 		for (Arbre arbre : lecture.listeArbres) {
 			FileOutputStream fos = new FileOutputStream("src/main/arbres/arbre"+ compteur +".serial");
 
@@ -47,10 +46,10 @@ public class LectureArbres {
 			oos.close();
 			fos.close();
 			compteur++;
-		}*/
+		}
 
 		//Pour lire les arbres
-		int compteur = 0;
+		/*int compteur = 0;
 		for (int i=0;i<26;i++) {
 			FileInputStream fis = new FileInputStream("src/main/arbres/arbre"+ compteur +".serial");
 
@@ -61,14 +60,14 @@ public class LectureArbres {
 			ois.close();
 			fis.close();
 			compteur++;
-		}
+		} */
 
 		System.out.println("Lecture des arbres");
 		for (Arbre arbre : lecture.listeArbres) {
 			System.out.println(arbre.getInitNoeud().getValeur() + " : " + arbre.getInitNoeud().getListeNoeuds().size());
 		}
 
-		System.out.println("Liste des documents");
+		/*System.out.println("Liste des documents");
 		LinkedList<String> docs = lecture.chercherMot("fgfj");
 		for (String doc : docs) {
 			System.out.println(doc);
@@ -121,8 +120,11 @@ public class LectureArbres {
 	}
 
 
-	public HashMap<String, Integer> wraperTT(String texte) {
+	public HashMap<String, Integer> wraperTT(String texte1) throws UnsupportedEncodingException {
 		HashMap<String,Integer> hashmap = new HashMap<String,Integer>();
+
+		byte[] bytes = texte1.getBytes("UTF-8");
+		String texte= new String(bytes, "ISO-8859-1");
 		texte = texte.replaceAll(",", " , ");
 		texte = texte.replaceAll("'", " ' ");
 		texte = texte.replaceAll("\"", " \" ");
@@ -130,14 +132,17 @@ public class LectureArbres {
 		texte = texte.replaceAll("[)]", " ) ");
 		texte = texte.replaceAll("\\[|\\]" , "");
 		texte = texte.replaceAll("[-+*/]", " ");
+		texte = texte.replaceAll("[«»]", "");
 		texte = texte.replaceAll("[0123456789]", " ");
 		texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
 		//System.out.println(texte);
 		String[] phrases = texte.split("[.]");
-		System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
+		//System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
+		System.setProperty("treetagger.home", "/home/theov/tree-tragger");
 		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
 		try {
-			tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
+			//tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
+			tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
 
 			tt.setHandler((token, pos, lemma) -> {
 				if ( !pos.startsWith("NUM") && !pos.startsWith("KON") &&  !pos.startsWith("PRP") &&  !pos.startsWith("DET") &&  !pos.startsWith("PUN") &&  !pos.startsWith("PRO")){
@@ -170,7 +175,7 @@ public class LectureArbres {
 		return hashmap;
 	}
 
-	public void lireTousLesDocument() {
+	public void lireTousLesDocument() throws UnsupportedEncodingException {
 		File resources = new File("src/main/resources");
 		String[] listeFichiers = resources.list();
 		Arrays.sort(listeFichiers);
@@ -181,7 +186,7 @@ public class LectureArbres {
 		}
 	}
 	
-	public void insererFichier(String fichier){
+	public void insererFichier(String fichier) throws UnsupportedEncodingException{
 		File file = new File("src/main/resources/" + fichier);
 		
 		String texte = this.lireFichier(file);
@@ -198,7 +203,7 @@ public class LectureArbres {
 	}
 
 	public void remplirArbre(HashMap<String,Integer> hashmap, String document) {
-		//System.out.println(document);
+		System.out.println(document);
 		for (String mot : hashmap.keySet()){
 			int compteur = 0;
 			int index = -1;
@@ -208,7 +213,7 @@ public class LectureArbres {
 				}
 				compteur += 1;
 			}
-			//System.out.println(mot);
+			System.out.println(mot);
 			for (int i = 0; i<hashmap.get(mot);i++) {
 				listeArbres.get(index).getInitNoeud().insererMots(mot, document);
 			}
