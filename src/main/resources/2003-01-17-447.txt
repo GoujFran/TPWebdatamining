@@ -1,1 +1,0 @@
- - Terrain et buts de handball.  - Ballon spécifique à faible rebond.  - 5 joueurs dont un gardien + 7 remplaçants volants.  - Tacles glissés, charges (même avec l'épaule) et contacts interdits.  - Durée de jeu variable en fonction de la compétition.  - Pas de hors-jeu.  - Dégagement du gardien à la main.  - Touche et corner joués au pied. 

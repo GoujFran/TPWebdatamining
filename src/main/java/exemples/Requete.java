@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.annolab.tt4j.TreeTaggerException;
 import org.annolab.tt4j.TreeTaggerWrapper;
@@ -91,8 +94,16 @@ public class Requete {
 			}
 			resultat.put(doc,res);
 		}
-		
-		return resultat;
+		HashMap<String,Double> resultatTrie = resultat.entrySet()
+								              .stream()
+								              .sorted(Map.Entry.comparingByValue())
+								              .collect(Collectors.toMap(
+								                Map.Entry::getKey, 
+								                Map.Entry::getValue, 
+								                (e1, e2) -> e1, 
+								                LinkedHashMap::new
+								              ));
+		return resultatTrie;
 	}
 
 }

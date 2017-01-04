@@ -7,13 +7,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.annolab.tt4j.TreeTaggerException;
 import org.annolab.tt4j.TreeTaggerWrapper;
@@ -47,6 +51,14 @@ public class LectureArbres {
 			fos.close();
 			compteur++;
 		}
+		FileOutputStream fos = new FileOutputStream("src/main/arbres/longueurDocuments.serial");
+		ObjectOutputStream oos= new ObjectOutputStream(fos);
+
+		oos.writeObject(lecture.getLongueurDocuments()); 
+		oos.flush();
+
+		oos.close();
+		fos.close();
 
 		//Pour lire les arbres
 		/*int compteur = 0;
@@ -60,7 +72,16 @@ public class LectureArbres {
 			ois.close();
 			fis.close();
 			compteur++;
-		} */
+		} 
+		FileInputStream fis = new FileInputStream("src/main/arbres/longueurDocuments.serial");
+
+		ObjectInputStream ois= new ObjectInputStream(fis);
+
+		lecture.setLongueurDocuments((HashMap<String, Integer>) ois.readObject());
+		ois.close();
+		fis.close();
+		compteur++;
+		*/
 
 		System.out.println("Lecture des arbres");
 		for (Arbre arbre : lecture.listeArbres) {
@@ -68,12 +89,12 @@ public class LectureArbres {
 		}
 
 		/*System.out.println("Liste des documents");
-		LinkedList<String> docs = lecture.chercherMot("fgfj");
+		LinkedList<String> docs = lecture.chercherMot("candidat");
 		for (String doc : docs) {
 			System.out.println(doc);
 		}
 		
-		/*Requete requete = new Requete("f");
+		Requete requete = new Requete("candidat");
 		HashMap<String, Double> hashmap = requete.calculCos(lecture);
 		for (Entry<String, Double> e : hashmap.entrySet()) {
 			System.out.println(e.getKey()+ " : "+e.getValue());
@@ -137,12 +158,12 @@ public class LectureArbres {
 		texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
 		//System.out.println(texte);
 		String[] phrases = texte.split("[.]");
-		//System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
-		System.setProperty("treetagger.home", "/home/theov/tree-tragger");
+		System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
+		//System.setProperty("treetagger.home", "/home/theov/tree-tragger");
 		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
 		try {
-			//tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
-			tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
+			tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
+			//tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
 
 			tt.setHandler((token, pos, lemma) -> {
 				if ( !pos.startsWith("NUM") && !pos.startsWith("KON") &&  !pos.startsWith("PRP") &&  !pos.startsWith("DET") &&  !pos.startsWith("PUN") &&  !pos.startsWith("PRO")){
@@ -201,9 +222,27 @@ public class LectureArbres {
 		longueurDocuments.put(fichier,res);
 		remplirArbre(hashmap, fichier);
 	}
+	
+	public void supprimerFichier(String fichier) throws UnsupportedEncodingException{
+		File file = new File("src/main/resources/" + fichier);
+		
+		String texte = this.lireFichier(file);
+		//System.out.println(texte);
+		HashMap<String,Integer> hashmap = this.wraperTT(texte);
+		
+		Set<String> listeMots = hashmap.keySet();
+		for (String mot : listeMots) {
+			LinkedList<String> listDoc = this.chercherMot(mot);
+			for (String doc : listDoc){
+				if (doc.equals(fichier)){
+					listDoc.remove(doc);
+				}
+			}
+		}
+	}
 
 	public void remplirArbre(HashMap<String,Integer> hashmap, String document) {
-		System.out.println(document);
+		//System.out.println(document);
 		for (String mot : hashmap.keySet()){
 			int compteur = 0;
 			int index = -1;
@@ -213,7 +252,7 @@ public class LectureArbres {
 				}
 				compteur += 1;
 			}
-			System.out.println(mot);
+			//System.out.println(mot);
 			for (int i = 0; i<hashmap.get(mot);i++) {
 				listeArbres.get(index).getInitNoeud().insererMots(mot, document);
 			}
@@ -243,13 +282,11 @@ public class LectureArbres {
 			String lettre = mot.substring(i,i+1);
 			boolean trouve = false;
 			for (Noeud temp : noeud.getListeNoeuds()) {
-				System.out.println(temp.getValeur());
 				if (temp.getValeur().equals(lettre)) {
 					noeud = temp;
 					trouve = true;
 					break;
 				}
-				System.out.println(trouve);
 			}
 			if (trouve == false) {
 				System.out.println("Le mot n'existe pas ! trouve false"); 
@@ -268,7 +305,12 @@ public class LectureArbres {
 	public HashMap<String, Integer> getLongueurDocuments() {
 		return longueurDocuments;
 	}
-	
+
+	public void setLongueurDocuments(HashMap<String, Integer> longueurDocuments) {
+		this.longueurDocuments = longueurDocuments;
+	}
+
+		
 	
 }
 

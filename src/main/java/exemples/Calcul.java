@@ -63,6 +63,7 @@ public class Calcul {
 
 	public static double calculOkapi(LectureArbres lectureArbre,String mot, String document) {
 		double result = 0;
+		System.out.println("Avant boucle : " + lectureArbre.getLongueurDocuments().size() );
 		if (lectureArbre.getLongueurDocuments().size() != 0) {
 
 			int moyenne=0;
@@ -70,6 +71,8 @@ public class Calcul {
 				moyenne += i;
 			}
 			moyenne = moyenne/lectureArbre.getLongueurDocuments().size();
+			
+			System.out.println("Moyenne : " +moyenne);
 
 			File resources = new File("src/main/resources");
 			String[] listeFichiers = resources.list();
