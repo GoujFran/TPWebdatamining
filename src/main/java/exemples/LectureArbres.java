@@ -13,6 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -30,74 +31,28 @@ public class LectureArbres {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-		// Pour créer les arbres
-		/*LectureArbres lecture = new LectureArbres(true);
-		lecture.lireTousLesDocument();*/
+		Interface inter = new Interface();
+		inter.afficherPremierEcran();
 
-		//Pour ne pas les créer quand on les récupère de la sérialisation
-		LectureArbres lecture = new LectureArbres(false);
-		
-		//Pour sérialiser les arbres
-		/*int compteur = 0;
-		for (Arbre arbre : lecture.listeArbres) {
-			FileOutputStream fos = new FileOutputStream("src/main/arbres/arbre"+ compteur +".serial");
-
-			ObjectOutputStream oos= new ObjectOutputStream(fos);
-
-			oos.writeObject(arbre); 
-			oos.flush();
-
-			oos.close();
-			fos.close();
-			compteur++;
-		}
-		FileOutputStream fos = new FileOutputStream("src/main/arbres/longueurDocuments.serial");
-		ObjectOutputStream oos= new ObjectOutputStream(fos);
-
-		oos.writeObject(lecture.getLongueurDocuments()); 
-		oos.flush();
-
-		oos.close();
-		fos.close();*/
-
-		//Pour lire les arbres
-		int compteur = 0;
-		for (int i=0;i<26;i++) {
-			FileInputStream fis = new FileInputStream("src/main/arbres/arbre"+ compteur +".serial");
-
-			ObjectInputStream ois= new ObjectInputStream(fis);
-
-			Arbre arbre = (Arbre) ois.readObject();
-			lecture.listeArbres.add(arbre);
-			ois.close();
-			fis.close();
-			compteur++;
-		} 
-		FileInputStream fis = new FileInputStream("src/main/arbres/longueurDocuments.serial");
-
-		ObjectInputStream ois= new ObjectInputStream(fis);
-
-		lecture.setLongueurDocuments((HashMap<String, Integer>) ois.readObject());
-		ois.close();
-		fis.close();
-		compteur++;
-
-		System.out.println("Lecture des arbres");
+		/*System.out.println("Lecture des arbres");
 		for (Arbre arbre : lecture.listeArbres) {
 			System.out.println(arbre.getInitNoeud().getValeur() + " : " + arbre.getInitNoeud().getListeNoeuds().size());
-		}
+		}*/
 
-		System.out.println("Liste des documents");
+		/*System.out.println("Liste des documents");
 		LinkedList<String> docs = lecture.chercherMot("candidat");
 		for (String doc : docs) {
 			System.out.println(doc);
 		}
-		
+
 		Requete requete = new Requete("candidat");
 		HashMap<String, Double> hashmap = requete.calculCos(lecture);
 		for (Entry<String, Double> e : hashmap.entrySet()) {
 			System.out.println(e.getKey()+ " : "+e.getValue());
-		}
+		}*/
+
+		Date maDate = new Date();
+		System.out.println(maDate);
 	}
 
 
@@ -205,30 +160,30 @@ public class LectureArbres {
 			insererFichier(fichier);
 		}
 	}
-	
+
 	public void insererFichier(String fichier) throws UnsupportedEncodingException{
 		File file = new File("src/main/resources/" + fichier);
-		
+
 		String texte = this.lireFichier(file);
 		//System.out.println(texte);
 		HashMap<String,Integer> hashmap = this.wraperTT(texte);
-		
+
 		int res=0;
 		for (int i :hashmap.values()) {
 			res += i;
 		}
-		
+
 		longueurDocuments.put(fichier,res);
 		remplirArbre(hashmap, fichier);
 	}
-	
+
 	public void supprimerFichier(String fichier) throws UnsupportedEncodingException{
 		File file = new File("src/main/resources/" + fichier);
-		
+
 		String texte = this.lireFichier(file);
 		//System.out.println(texte);
 		HashMap<String,Integer> hashmap = this.wraperTT(texte);
-		
+
 		Set<String> listeMots = hashmap.keySet();
 		for (String mot : listeMots) {
 			LinkedList<String> listDoc = this.chercherMot(mot);
@@ -267,7 +222,7 @@ public class LectureArbres {
 		LinkedList<String> documents = null;
 		int compteur = 0;
 		int index = -1;
-		
+
 		//chercher le bon arbre
 		for (String lettre : alphabet) {
 			if (mot.startsWith(lettre)) {
@@ -276,7 +231,7 @@ public class LectureArbres {
 			compteur += 1;
 		}
 		Noeud noeud = listeArbres.get(index).getInitNoeud();
-		
+
 		for (int i = 1;i<mot.length();i++) {
 			String lettre = mot.substring(i,i+1);
 			boolean trouve = false;
@@ -309,8 +264,60 @@ public class LectureArbres {
 		this.longueurDocuments = longueurDocuments;
 	}
 
-		
-	
+	public void creerArbres() throws IOException {
+
+		this.lireTousLesDocument();
+
+		//Pour sérialiser les arbres
+		int compteur = 0;
+		for (Arbre arbre : this.listeArbres) {
+			FileOutputStream fos = new FileOutputStream("src/main/arbres/arbre"+ compteur +".serial");
+
+			ObjectOutputStream oos= new ObjectOutputStream(fos);
+
+			oos.writeObject(arbre); 
+			oos.flush();
+
+			oos.close();
+			fos.close();
+			compteur++;
+		}
+		FileOutputStream fos = new FileOutputStream("src/main/arbres/longueurDocuments.serial");
+		ObjectOutputStream oos= new ObjectOutputStream(fos);
+
+		oos.writeObject(this.getLongueurDocuments()); 
+		oos.flush();
+
+		oos.close();
+		fos.close();
+	}
+
+	public void importerArbres() throws IOException, ClassNotFoundException {
+
+
+		//Pour lire les arbres
+		int compteur = 0;
+		for (int i=0;i<26;i++) {
+			FileInputStream fis = new FileInputStream("src/main/arbres/arbre"+ compteur +".serial");
+
+			ObjectInputStream ois= new ObjectInputStream(fis);
+
+			Arbre arbre = (Arbre) ois.readObject();
+			this.listeArbres.add(arbre);
+			ois.close();
+			fis.close();
+			compteur++;
+		} 
+		FileInputStream fis = new FileInputStream("src/main/arbres/longueurDocuments.serial");
+
+		ObjectInputStream ois= new ObjectInputStream(fis);
+
+		this.setLongueurDocuments((HashMap<String, Integer>) ois.readObject());
+		ois.close();
+		fis.close();
+		compteur++;
+	}
+
 }
 
 
