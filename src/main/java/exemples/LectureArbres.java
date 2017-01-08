@@ -15,9 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.annolab.tt4j.TreeTaggerException;
@@ -195,6 +193,36 @@ public class LectureArbres {
 		}
 	}
 
+	public void methodeTest () throws UnsupportedEncodingException {
+		File resources = new File("src/main/resources");
+		String[] listeFichiers = resources.list();
+		Arrays.sort(listeFichiers);
+		ArrayList<String> listeMots = new ArrayList<String>();
+		
+		for (String fichier : listeFichiers){
+			File file = new File("src/main/resources/" + fichier);
+			String texte1 = this.lireFichier(file);
+			
+			byte[] bytes = texte1.getBytes("UTF-8");
+			String texte= new String(bytes, "ISO-8859-1");
+			texte = texte.replaceAll(",", " , ");
+			texte = texte.replaceAll("'", " ' ");
+			texte = texte.replaceAll("\"", " \" ");
+			texte = texte.replaceAll("[(]", " ( ");
+			texte = texte.replaceAll("[)]", " ) ");
+			texte = texte.replaceAll("\\[|\\]" , "");
+			texte = texte.replaceAll("[-+*/=@¤µ£]", " ");
+			texte = texte.replaceAll("[«»{}_^]", "");
+			texte = texte.replaceAll("[0123456789]", " ");
+			texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
+			//System.out.println(texte);
+			String[] mots = texte.split("[ ]");
+			for (String mot : mots){
+				listeMots.add(mot);
+			}
+		}
+	}
+	
 	public void remplirArbre(HashMap<String,Integer> hashmap, String document) {
 		//System.out.println(document);
 		for (String mot : hashmap.keySet()){
