@@ -35,11 +35,12 @@ public class LectureArbres {
 		LectureArbres lecture = new LectureArbres (true);
 		lecture.creerArbres();
 
-		/*System.out.println("Lecture des arbres");
+		System.out.println("Lecture des arbres");
 		for (Arbre arbre : lecture.listeArbres) {
 			System.out.println(arbre.getInitNoeud().getValeur() + " : " + arbre.getInitNoeud().getListeNoeuds().size());
-		}*/
+		}
 
+		System.out.println(lecture.longueurDocuments.size());
 		/*System.out.println("Liste des documents");
 		LinkedList<String> docs = lecture.chercherMot("candidat");
 		for (String doc : docs) {
@@ -113,13 +114,13 @@ public class LectureArbres {
 		texte = texte.replaceAll("[0123456789]", " ");
 		texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
 		//System.out.println(texte);
-		//String[] phrases = texte.split("[.]");
-		System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
-		//System.setProperty("treetagger.home", "/home/theov/tree-tragger");
+		String[] phrases = texte.split("[.]");
+		//System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
+		System.setProperty("treetagger.home", "/home/theov/tree-tragger");
 		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
 		try {
-			tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
-			//tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
+			//tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
+			tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
 
 			tt.setHandler((token, pos, lemma) -> {
 				if ( !pos.startsWith("NUM") && !pos.startsWith("KON") &&  !pos.startsWith("PRP") &&  !pos.startsWith("DET") &&  !pos.startsWith("PUN") &&  !pos.startsWith("PRO")){
@@ -133,10 +134,10 @@ public class LectureArbres {
 				}
 			}
 					);
-
-			String[] mots = texte.split(" ");
-			tt.process(asList(mots));
-
+			for (String phrase : phrases){
+				String[] mots = phrase.split(" ");
+				tt.process(asList(mots));
+			}
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -196,11 +197,13 @@ public class LectureArbres {
 		}
 	}
 
-	public void methodeTest () throws UnsupportedEncodingException {
+	public void methodeTest() throws UnsupportedEncodingException {
 		File resources = new File("src/main/resources");
 		String[] listeFichiers = resources.list();
+		System.out.println(listeFichiers.length);
 		Arrays.sort(listeFichiers);
-		ArrayList<String> listeMots = new ArrayList<String>();
+		String tousFichier = "";
+		HashMap<String,Integer> hashmap = new HashMap<String,Integer>();
 
 		for (String fichier : listeFichiers){
 			File file = new File("src/main/resources/" + fichier);
@@ -218,12 +221,69 @@ public class LectureArbres {
 			texte = texte.replaceAll("[«»{}_^]", "");
 			texte = texte.replaceAll("[0123456789]", " ");
 			texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
-			//System.out.println(texte);
-			String[] mots = texte.split("[ ]");
-			for (String mot : mots){
-				listeMots.add(mot);
-			}
+			tousFichier = tousFichier + texte + "  Vleeschouwers  ";	
 		}
+		//System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
+		System.setProperty("treetagger.home", "/home/theov/tree-tragger");
+		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
+		try {
+			LinkedList<Integer> compteur = new LinkedList<Integer>();
+			compteur.add(0);
+			
+			LinkedList<Integer> nbMots = new LinkedList<Integer>();
+			nbMots.add(0);
+			//tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
+			tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
+
+			tt.setHandler((token, pos, lemma) -> {
+				
+				if ( !pos.startsWith("NUM") && !pos.startsWith("KON") &&  !pos.startsWith("PRP") &&  !pos.startsWith("DET") &&  !pos.startsWith("PUN") &&  !pos.startsWith("PRO")){
+
+					if (lemma.equals("Vleeschouwers")){
+						longueurDocuments.put(listeFichiers[compteur.getFirst()], nbMots.getFirst());
+						nbMots.addFirst(0);
+						
+						int ind = compteur.getFirst();
+						System.out.println(ind);
+						compteur.addFirst(ind+1);
+					} else {
+						//System.out.println(token + " " + pos +" "+lemma);
+						int nb = nbMots.getFirst();
+						System.out.println(nb);
+						nbMots.addFirst(nb+1);
+						
+						lemma = removeAccent(lemma.toLowerCase());
+						int compt = 0;
+						int index = -1;
+						for (String lettre : alphabet) {
+							if (lemma.startsWith(lettre)) {
+								index = compt;
+							}
+							compt += 1;
+						}
+						//System.out.println(mot);
+						listeArbres.get(index).getInitNoeud().insererMots(lemma, listeFichiers[compteur.get(0)]);
+
+					}
+				}
+			}
+					);
+			String[] mots = tousFichier.split(" ");
+			tt.process(asList(mots));
+
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TreeTaggerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			tt.destroy();
+		}
+
+
 	}
 
 	public void remplirArbre(HashMap<String,Integer> hashmap, String document) {
@@ -297,7 +357,9 @@ public class LectureArbres {
 
 	public void creerArbres() throws IOException {
 
-		this.lireTousLesDocument();
+		//this.lireTousLesDocument();
+		
+		this.methodeTest();
 
 		//Pour sérialiser les arbres
 		int compteur = 0;
