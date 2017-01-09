@@ -59,8 +59,8 @@ public class Interface {
 		String[] listeTitreArticles = listeDocuments.toArray(new String[listeDocuments.size()]);
 
 		String choix = (String)JOptionPane.showInputDialog(null, 
-				"Articles à noter",
-				"Sélection de l'article à noter",
+				"Documents correspondants à votre recherche",
+				"Recherche",
 				JOptionPane.QUESTION_MESSAGE, null, listeTitreArticles, null);
 
 		if (choix!=null){

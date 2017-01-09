@@ -29,8 +29,11 @@ public class LectureArbres {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-		Interface inter = new Interface();
-		inter.afficherPremierEcran();
+		/*Interface inter = new Interface();
+		inter.afficherPremierEcran();*/
+
+		LectureArbres lecture = new LectureArbres (true);
+		lecture.creerArbres();
 
 		/*System.out.println("Lecture des arbres");
 		for (Arbre arbre : lecture.listeArbres) {
@@ -99,6 +102,7 @@ public class LectureArbres {
 		byte[] bytes = texte1.getBytes("UTF-8");
 		String texte= new String(bytes, "ISO-8859-1");
 		texte = texte.replaceAll(",", " , ");
+		texte = texte.replaceAll(".", " . ");
 		texte = texte.replaceAll("'", " ' ");
 		texte = texte.replaceAll("\"", " \" ");
 		texte = texte.replaceAll("[(]", " ( ");
@@ -109,7 +113,7 @@ public class LectureArbres {
 		texte = texte.replaceAll("[0123456789]", " ");
 		texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
 		//System.out.println(texte);
-		String[] phrases = texte.split("[.]");
+		//String[] phrases = texte.split("[.]");
 		System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
 		//System.setProperty("treetagger.home", "/home/theov/tree-tragger");
 		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
@@ -130,10 +134,9 @@ public class LectureArbres {
 			}
 					);
 
-			for (String phrase : phrases) {
-				String[] mots = phrase.split(" ");
-				tt.process(asList(mots));
-			}
+			String[] mots = texte.split(" ");
+			tt.process(asList(mots));
+
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -198,11 +201,11 @@ public class LectureArbres {
 		String[] listeFichiers = resources.list();
 		Arrays.sort(listeFichiers);
 		ArrayList<String> listeMots = new ArrayList<String>();
-		
+
 		for (String fichier : listeFichiers){
 			File file = new File("src/main/resources/" + fichier);
 			String texte1 = this.lireFichier(file);
-			
+
 			byte[] bytes = texte1.getBytes("UTF-8");
 			String texte= new String(bytes, "ISO-8859-1");
 			texte = texte.replaceAll(",", " , ");
@@ -222,7 +225,7 @@ public class LectureArbres {
 			}
 		}
 	}
-	
+
 	public void remplirArbre(HashMap<String,Integer> hashmap, String document) {
 		//System.out.println(document);
 		for (String mot : hashmap.keySet()){
