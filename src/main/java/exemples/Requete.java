@@ -39,7 +39,6 @@ public class Requete {
 		phrase = phrase.replaceAll("[0123456789]", " ");
 		phrase = phrase.replaceAll("[?!#$€%&'`;:/@...]", " ");
 		//System.out.println(texte);
-		String[] phrases = phrase.split("[.]");
 		System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
 		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
 		try {
@@ -56,10 +55,9 @@ public class Requete {
 			}
 					);
 
-			for (String phrase : phrases) {
-				String[] mots = phrase.split(" ");
-				tt.process(asList(mots));
-			}
+			String[] mots = phrase.split(" ");
+			tt.process(asList(mots));
+
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -73,7 +71,7 @@ public class Requete {
 		}
 		return liste;
 	}
-	
+
 	public String removeAccent(String source) {
 		return Normalizer.normalize(source, Normalizer.Form.NFD).replaceAll("[\u0300-\u036F]", "");
 	}
@@ -81,13 +79,13 @@ public class Requete {
 
 	public HashMap<String, Double> calculCos(LectureArbres lecture) {
 		HashMap<String,Double> resultat = new HashMap<String,Double> ();
-		
+
 		LinkedList<String> liste = this.wraperTT();
 		HashSet<String> listeDocuments = new HashSet<String>();
 		for (String mot : liste) {
 			listeDocuments.addAll(lecture.chercherMot(mot));
 		}
-	
+
 		for (String doc : listeDocuments) {
 			double res = 0;
 			for (String mot : liste) {
@@ -96,14 +94,14 @@ public class Requete {
 			resultat.put(doc,res);
 		}
 		HashMap<String,Double> resultatTrie = resultat.entrySet()
-								              .stream()
-								              .sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
-								              .collect(Collectors.toMap(
-								                Map.Entry::getKey, 
-								                Map.Entry::getValue, 
-								                (e1, e2) -> e1, 
-								                LinkedHashMap::new
-								              ));
+				.stream()
+				.sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
+				.collect(Collectors.toMap(
+						Map.Entry::getKey, 
+						Map.Entry::getValue, 
+						(e1, e2) -> e1, 
+						LinkedHashMap::new
+						));
 		return resultatTrie;
 	}
 

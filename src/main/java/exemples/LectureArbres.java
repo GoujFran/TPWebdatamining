@@ -29,18 +29,18 @@ public class LectureArbres {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-		/*Interface inter = new Interface();
-		inter.afficherPremierEcran();*/
+		Interface inter = new Interface();
+		inter.afficherPremierEcran();
 
-		LectureArbres lecture = new LectureArbres (true);
+		/*LectureArbres lecture = new LectureArbres (true);
 		lecture.creerArbres();
 
 		System.out.println("Lecture des arbres");
 		for (Arbre arbre : lecture.listeArbres) {
 			System.out.println(arbre.getInitNoeud().getValeur() + " : " + arbre.getInitNoeud().getListeNoeuds().size());
-		}
+		}*/
 
-		System.out.println(lecture.longueurDocuments.size());
+		//System.out.println(lecture.longueurDocuments.size());
 		/*System.out.println("Liste des documents");
 		LinkedList<String> docs = lecture.chercherMot("candidat");
 		for (String doc : docs) {
@@ -115,12 +115,12 @@ public class LectureArbres {
 		texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
 		//System.out.println(texte);
 		String[] phrases = texte.split("[.]");
-		//System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
-		System.setProperty("treetagger.home", "/home/theov/tree-tragger");
+		System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
+		//System.setProperty("treetagger.home", "/home/theov/tree-tragger");
 		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
 		try {
-			//tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
-			tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
+			tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
+			//tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
 
 			tt.setHandler((token, pos, lemma) -> {
 				if ( !pos.startsWith("NUM") && !pos.startsWith("KON") &&  !pos.startsWith("PRP") &&  !pos.startsWith("DET") &&  !pos.startsWith("PUN") &&  !pos.startsWith("PRO")){
@@ -200,7 +200,6 @@ public class LectureArbres {
 	public void methodeTest() throws UnsupportedEncodingException {
 		File resources = new File("src/main/resources");
 		String[] listeFichiers = resources.list();
-		System.out.println(listeFichiers.length);
 		Arrays.sort(listeFichiers);
 		String tousFichier = "";
 		HashMap<String,Integer> hashmap = new HashMap<String,Integer>();
@@ -223,8 +222,8 @@ public class LectureArbres {
 			texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
 			tousFichier = tousFichier + texte + "  Vleeschouwers  ";	
 		}
-		//System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
-		System.setProperty("treetagger.home", "/home/theov/tree-tragger");
+		System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
+		//System.setProperty("treetagger.home", "/home/theov/tree-tragger");
 		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
 		try {
 			LinkedList<Integer> compteur = new LinkedList<Integer>();
@@ -232,8 +231,8 @@ public class LectureArbres {
 			
 			LinkedList<Integer> nbMots = new LinkedList<Integer>();
 			nbMots.add(0);
-			//tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
-			tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
+			tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
+			//tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
 
 			tt.setHandler((token, pos, lemma) -> {
 				
@@ -244,12 +243,10 @@ public class LectureArbres {
 						nbMots.addFirst(0);
 						
 						int ind = compteur.getFirst();
-						System.out.println(ind);
 						compteur.addFirst(ind+1);
 					} else {
 						//System.out.println(token + " " + pos +" "+lemma);
 						int nb = nbMots.getFirst();
-						System.out.println(nb);
 						nbMots.addFirst(nb+1);
 						
 						lemma = removeAccent(lemma.toLowerCase());
