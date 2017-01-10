@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.annolab.tt4j.TreeTaggerException;
@@ -29,14 +30,15 @@ public class LectureArbres {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-		/*Interface inter = new Interface();
-		inter.afficherPremierEcran(); */
-
+		Interface inter = new Interface();
+		inter.afficherPremierEcran(); 
+		
 		/*LectureArbres lecture = new LectureArbres (true);
 		lecture.creerArbres();*/
 
 		/*LectureArbres lecture = new LectureArbres (false);
 		lecture.importerArbres(); */
+		
 		/*System.out.println("Lecture des arbres");
 		for (Arbre arbre : lecture.listeArbres) {
 			System.out.println(arbre.getInitNoeud().getValeur() + " : " + arbre.getInitNoeud().getListeNoeuds().size());
@@ -47,16 +49,16 @@ public class LectureArbres {
 		LinkedList<String> docs = lecture.chercherMot("candidat");
 		for (String doc : docs) {
 			System.out.println(doc);
-		}
+		}*/
 
-		Requete requete = new Requete("candidat");
+		/*Requete requete = new Requete("dgfgdh");
 		HashMap<String, Double> hashmap = requete.calculCos(lecture);
 		for (Entry<String, Double> e : hashmap.entrySet()) {
 			System.out.println(e.getKey()+ " : "+e.getValue());
 		}*/
 
-		Date maDate = new Date();
-		System.out.println(maDate);
+		/*Date maDate = new Date();
+		System.out.println(maDate);*/
 	}
 
 
@@ -117,12 +119,12 @@ public class LectureArbres {
 		texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
 		//System.out.println(texte);
 		String[] phrases = texte.split("[.]");
-		//System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
-		System.setProperty("treetagger.home", "/home/theov/tree-tragger");
+		System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
+		//System.setProperty("treetagger.home", "/home/theov/tree-tragger");
 		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
 		try {
-			//tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
-			tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
+			tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
+			//tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
 
 			tt.setHandler((token, pos, lemma) -> {
 				if ( !pos.startsWith("NUM") && !pos.startsWith("KON") &&  !pos.startsWith("PRP") &&  !pos.startsWith("DET") &&  !pos.startsWith("PUN") &&  !pos.startsWith("PRO")){
@@ -309,7 +311,7 @@ public class LectureArbres {
 
 
 	public LinkedList<String> chercherMot(String mot) {
-		LinkedList<String> documents = null;
+		LinkedList<String> documents = new LinkedList<>();
 		int compteur = 0;
 		int index = -1;
 
@@ -333,13 +335,13 @@ public class LectureArbres {
 				}
 			}
 			if (trouve == false) {
-				System.out.println("Le mot n'existe pas ! trouve false"); 
+				//System.out.println("Le mot n'existe pas ! trouve false"); 
 				noeud = new Noeud(null,null);
 				break;
 			} 
 		}
 		if (noeud.getFeuille() == null) {
-			System.out.println("Le mot n'existe pas ! pas de feuille"); 
+			//System.out.println("Le mot n'existe pas ! pas de feuille"); 
 		} else {
 			documents = noeud.getFeuille().getDocuments();
 		}

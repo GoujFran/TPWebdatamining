@@ -37,7 +37,7 @@ public class Interface {
 			lecture.importerArbres();
 			this.faireUneRecherche();
 		}
-		
+
 	}
 
 	public void faireUneRecherche() {
@@ -51,17 +51,15 @@ public class Interface {
 
 		Requete requete = new Requete(recherche.getText());
 
-		try {
-			HashMap<String, Double> hashmap = requete.calculCos(lecture);
-			Set<String> listeDocuments = hashmap.keySet();
-			if (choix == 0) {
-				this.afficherResultat(listeDocuments);
-			}
-		} catch (NullPointerException e) {
-				JOptionPane.showMessageDialog(null, "Il n'y a pas de document correspondant à votre recherche", "Information", JOptionPane.INFORMATION_MESSAGE);
-				this.faireUneRecherche();
-		}
-
+		HashMap<String, Double> hashmap = requete.calculCos(lecture);
+		Set<String> listeDocuments = hashmap.keySet();
+		if (choix == 0 && !listeDocuments.isEmpty()) {
+			this.afficherResultat(listeDocuments);
+		} 
+		if (choix == 0 && listeDocuments.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Il n'y a pas de document correspondant à votre recherche", "Information", JOptionPane.INFORMATION_MESSAGE);
+			this.faireUneRecherche();
+		} 
 
 	}
 
@@ -72,7 +70,7 @@ public class Interface {
 				"Documents correspondants à votre recherche",
 				"Recherche",
 				JOptionPane.QUESTION_MESSAGE, null, listeTitreArticles, null);
-		
+
 		if (choix!=null){
 			File file = new File("src/main/resources/" + choix);
 			String texte = lecture.lireFichier(file);
@@ -86,14 +84,14 @@ public class Interface {
 			JScrollPane scrollPane = new JScrollPane(message);
 
 			JOptionPane.showMessageDialog(null, scrollPane);  
-			
+
 			this.afficherResultat(listeDocuments);
 		} else {
 			this.faireUneRecherche();
 		}
 
-		
-		
+
+
 	}
 
 	public LectureArbres getLecture() {
