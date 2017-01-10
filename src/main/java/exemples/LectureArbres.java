@@ -29,13 +29,15 @@ public class LectureArbres {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-		Interface inter = new Interface();
-		inter.afficherPremierEcran();
+		/*Interface inter = new Interface();
+		inter.afficherPremierEcran(); */
 
 		/*LectureArbres lecture = new LectureArbres (true);
-		lecture.creerArbres();
+		lecture.creerArbres();*/
 
-		System.out.println("Lecture des arbres");
+		/*LectureArbres lecture = new LectureArbres (false);
+		lecture.importerArbres(); */
+		/*System.out.println("Lecture des arbres");
 		for (Arbre arbre : lecture.listeArbres) {
 			System.out.println(arbre.getInitNoeud().getValeur() + " : " + arbre.getInitNoeud().getListeNoeuds().size());
 		}*/
@@ -115,12 +117,12 @@ public class LectureArbres {
 		texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
 		//System.out.println(texte);
 		String[] phrases = texte.split("[.]");
-		System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
-		//System.setProperty("treetagger.home", "/home/theov/tree-tragger");
+		//System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
+		System.setProperty("treetagger.home", "/home/theov/tree-tragger");
 		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
 		try {
-			tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
-			//tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
+			//tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
+			tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
 
 			tt.setHandler((token, pos, lemma) -> {
 				if ( !pos.startsWith("NUM") && !pos.startsWith("KON") &&  !pos.startsWith("PRP") &&  !pos.startsWith("DET") &&  !pos.startsWith("PUN") &&  !pos.startsWith("PRO")){
@@ -222,8 +224,8 @@ public class LectureArbres {
 			texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
 			tousFichier = tousFichier + texte + "  Vleeschouwers  ";	
 		}
-		System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
-		//System.setProperty("treetagger.home", "/home/theov/tree-tragger");
+		//System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
+		System.setProperty("treetagger.home", "/home/theov/tree-tragger");
 		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
 		try {
 			LinkedList<Integer> compteur = new LinkedList<Integer>();
@@ -231,8 +233,8 @@ public class LectureArbres {
 			
 			LinkedList<Integer> nbMots = new LinkedList<Integer>();
 			nbMots.add(0);
-			tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
-			//tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
+			//tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
+			tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
 
 			tt.setHandler((token, pos, lemma) -> {
 				

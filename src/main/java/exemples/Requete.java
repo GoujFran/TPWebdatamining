@@ -39,11 +39,12 @@ public class Requete {
 		phrase = phrase.replaceAll("[0123456789]", " ");
 		phrase = phrase.replaceAll("[?!#$€%&'`;:/@...]", " ");
 		//System.out.println(texte);
-		System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
+		//System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
+		System.setProperty("treetagger.home", "/home/theov/tree-tragger");
 		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
 		try {
-			tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
-
+			//tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
+			tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
 			tt.setHandler((token, pos, lemma) -> {
 				if ( !pos.startsWith("NUM") && !pos.startsWith("KON") &&  !pos.startsWith("PRP") &&  !pos.startsWith("DET") &&  !pos.startsWith("PUN") &&  !pos.startsWith("PRO")){
 					//System.out.println(token + " " + pos +" "+lemma);
