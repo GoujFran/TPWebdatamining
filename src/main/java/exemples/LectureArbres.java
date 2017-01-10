@@ -119,12 +119,12 @@ public class LectureArbres {
 		texte = texte.replaceAll("[?!#$€%&'`;:/@...]", " ");
 		//System.out.println(texte);
 		String[] phrases = texte.split("[.]");
-		System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
-		//System.setProperty("treetagger.home", "/home/theov/tree-tragger");
+		//System.setProperty("treetagger.home", "/home/francoise/Documents/ENSAI/WebDataMining");
+		System.setProperty("treetagger.home", "/home/theov/tree-tragger");
 		TreeTaggerWrapper tt = new TreeTaggerWrapper<String>();
 		try {
-			tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
-			//tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
+			//tt.setModel("/home/francoise/Documents/ENSAI/WebDataMining/lib/french-utf8.par:iso8859-1");
+			tt.setModel("/home/theov/tree-tragger/lib/french-utf8.par:iso8859-1");
 
 			tt.setHandler((token, pos, lemma) -> {
 				if ( !pos.startsWith("NUM") && !pos.startsWith("KON") &&  !pos.startsWith("PRP") &&  !pos.startsWith("DET") &&  !pos.startsWith("PUN") &&  !pos.startsWith("PRO")){
