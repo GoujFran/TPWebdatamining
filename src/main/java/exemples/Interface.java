@@ -30,12 +30,14 @@ public class Interface {
 		if (choix == 0) {
 			lecture = new LectureArbres (true);
 			lecture.creerArbres();
+			this.faireUneRecherche();
 		}
 		if (choix == 1) {
 			lecture = new LectureArbres (false);
 			lecture.importerArbres();
+			this.faireUneRecherche();
 		}
-		this.faireUneRecherche();
+		
 	}
 
 	public void faireUneRecherche() {
