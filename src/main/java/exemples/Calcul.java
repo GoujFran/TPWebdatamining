@@ -8,6 +8,19 @@ import java.util.Set;
 
 public class Calcul {
 
+	private int moyenne; 
+	public static File resources = new File("src/main/resources");
+	public static String[] listeFichiers = resources.list();
+
+	public void setMoyenne(LectureArbres lectureArbre){
+		moyenne = 0;
+		for (int i :lectureArbre.getLongueurDocuments().values()) {
+			moyenne += i;
+		}
+		moyenne = moyenne/lectureArbre.getLongueurDocuments().size();
+
+
+	}
 
 	/**  public double calculTF(HashMap<String, HashMap<String,Integer>> hashmap,String mot, String document){
         double result = 0;
@@ -61,18 +74,9 @@ public class Calcul {
 		return result;
 	}
 
-	public static double calculOkapi(LectureArbres lectureArbre,String mot, String document) {
+	public double calculOkapi(LectureArbres lectureArbre,String mot, String document) {
 		double result = 0;
 		if (lectureArbre.getLongueurDocuments().size() != 0) {
-
-			int moyenne=0;
-			for (int i :lectureArbre.getLongueurDocuments().values()) {
-				moyenne += i;
-			}
-			moyenne = moyenne/lectureArbre.getLongueurDocuments().size();
-
-			File resources = new File("src/main/resources");
-			String[] listeFichiers = resources.list();
 			Set<String> listDoc = new HashSet<String>(lectureArbre.chercherMot(mot));
 			result = 2.2*calculTF(lectureArbre, mot, document)*Math.log10((listeFichiers.length-listDoc.size()+0.5)/(listDoc.size()+0.5))/(1.2*(0.25+0.75*lectureArbre.getLongueurDocuments().get(document)/moyenne)+calculTF(lectureArbre, mot, document));
 		}

@@ -78,6 +78,8 @@ public class Requete {
 
 
 	public HashMap<String, Double> calculCos(LectureArbres lecture) {
+		Calcul calcul = new Calcul();
+		calcul.setMoyenne(lecture);
 		HashMap<String,Double> resultat = new HashMap<String,Double> ();
 
 		LinkedList<String> liste = this.wraperTT();
@@ -89,7 +91,7 @@ public class Requete {
 		for (String doc : listeDocuments) {
 			double res = 0;
 			for (String mot : liste) {
-				res += Calcul.calculOkapi(lecture, mot, doc);
+				res += calcul.calculOkapi(lecture, mot, doc);
 			}
 			resultat.put(doc,res);
 		}
